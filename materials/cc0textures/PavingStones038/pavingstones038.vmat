@@ -5,7 +5,7 @@ Layer0
 	shader "parallax_occlusion.vfx"
 
 	//---- Ambient Occlusion ----
-	TextureAmbientOcclusion "materials/default/default_ao.tga"
+	TextureAmbientOcclusion "materials/cc0textures/pavingstones038/pavingstones038_2k_ambientocclusion.jpg"
 
 	//---- Color ----
 	g_flModelTintAmount "1.000"
