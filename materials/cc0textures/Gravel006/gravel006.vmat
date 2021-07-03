@@ -30,10 +30,10 @@ Layer0
 
 	//---- Parallax ----
 	g_flHeightMapScale "0.020"
-	g_nLODThreshold "4"
-	g_nMaxSamples "32"
+	g_nLODThreshold "5"
+	g_nMaxSamples "16"
 	g_nMinSamples "8"
-	TextureHeight "materials/cc0textures/gravel006/gravel006_2k_displacement.jpg"
+	TextureHeight "materials/cc0textures/gravel006/gravel006_2k_displacement_m.tga"
 
 	//---- Roughness ----
 	TextureRoughness "materials/cc0textures/gravel006/gravel006_2k_roughness.jpg"

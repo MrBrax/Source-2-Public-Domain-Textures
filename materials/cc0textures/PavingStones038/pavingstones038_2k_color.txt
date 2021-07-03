@@ -1,4 +1,4 @@
 "settings"
 {
-	"maxres"		"1024"
+	"maxres"		"2048"
 }
