@@ -5,7 +5,7 @@ Layer0
 	shader "parallax_occlusion.vfx"
 
 	//---- Ambient Occlusion ----
-	TextureAmbientOcclusion "materials/cc0textures/corrugatedsteel002/corrugatedsteel002_2k_ambientocclusion.jpg"
+	TextureAmbientOcclusion "materials/cc0textures/corrugatedsteel005/corrugatedsteel005_2k_ambientocclusion.jpg"
 
 	//---- Color ----
 	g_flModelTintAmount "1.000"
@@ -26,14 +26,14 @@ Layer0
 	TextureMetalness "materials/cc0textures/corrugatedsteel005/corrugatedsteel005_2k_metalness.jpg"
 
 	//---- Normal ----
-	TextureNormal "materials/cc0textures/corrugatedsteel002/corrugatedsteel002_2k_normal.jpg"
+	TextureNormal "materials/cc0textures/corrugatedsteel005/corrugatedsteel005_2k_normal.jpg"
 
 	//---- Parallax ----
 	g_flHeightMapScale "0.020"
 	g_nLODThreshold "4"
 	g_nMaxSamples "32"
 	g_nMinSamples "8"
-	TextureHeight "materials/cc0textures/corrugatedsteel002/corrugatedsteel002_2k_ambientocclusion.jpg"
+	TextureHeight "materials/cc0textures/corrugatedsteel005/corrugatedsteel005_2k_displacement.jpg"
 
 	//---- Roughness ----
 	TextureRoughness "materials/cc0textures/corrugatedsteel005/corrugatedsteel005_2k_roughness.jpg"
@@ -44,4 +44,9 @@ Layer0
 	g_vTexCoordOffset "[0.000 0.000]"
 	g_vTexCoordScale "[1.000 1.000]"
 	g_vTexCoordScrollSpeed "[0.000 0.000]"
+
+	SystemAttributes
+	{
+		PhysicsSurfaceProperties "metal.sheet"
+	}
 }
