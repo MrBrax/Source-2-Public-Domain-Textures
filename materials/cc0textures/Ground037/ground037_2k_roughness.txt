@@ -1,4 +1,6 @@
 "settings"
 {
 	"maxres"		"512"
+	"brightness"		"1.200000"
+	"brightness_offset"		"0.200000"
 }
