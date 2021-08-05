@@ -35,6 +35,7 @@ for folder in subfolders:
     mat_rough_path = ""
     mat_metalness_path = ""
     mat_opacity_path = ""
+    mat_surfprop = "default"
 
     # sane defaults for 2k
     mat_world_width = 128
@@ -84,6 +85,11 @@ for folder in subfolders:
     if mat_opacity_path:
         mat_shader = "complex.vfx"
     
+    if not mat_color_path:
+        print(f"Invalid material: {material_name}")
+        continue
+
+    mat_surfprop = material_name[:-3] # remove '001'
 
     print(f"Material name: {material_name}")
 
@@ -98,34 +104,41 @@ for folder in subfolders:
     if mat_shader == "complex.vfx":
         vmat_file.write('\tF_SPECULAR 1\n')
 
+    # TINT
     vmat_file.write('\tg_flModelTintAmount "1.000\"\n')
     vmat_file.write('\tg_vColorTint "[1.000000 1.000000 1.000000 0.000000]"\n')
-    vmat_file.write(f'\tTextureColor "{mat_color_path}"\n')
 
+    # BASE COLOR
+    vmat_file.write(f'\tTextureColor "{mat_color_path}"\n')
 
     vmat_file.write(f'\tg_flFadeExponent "1.000"\n')
     vmat_file.write(f'\tg_bFogEnabled "1"\n')
 
     vmat_file.write(f'\tg_flDirectionalLightmapMinZ "0.050"\n')
-    vmat_file.write(f'\tg_flDirectionalLightmapStrength "1.000"\n')
+    vmat_file.write(f'\tg_flDirectionalLightmapStrength "1.000"\n')    
 
-    vmat_file.write(f'\tg_flMetalness "0.000"\n')
-
+    # NORMAL
     if mat_normal_path:
         vmat_file.write(f'\tTextureNormal "{mat_normal_path}"\n')
 
+    # ROUGHNESS
     if mat_rough_path:
         vmat_file.write(f'\tTextureRoughness "{mat_rough_path}"\n')
 
+    # AMBIENT OCCLUSION
     if mat_ao_path:
         vmat_file.write(f'\tTextureAmbientOcclusion "{mat_ao_path}"\n')
         vmat_file.write(f'\tg_flAmbientOcclusionDirectDiffuse "0.000"\n')
         vmat_file.write(f'\tg_flAmbientOcclusionDirectSpecular "0.000"\n')
 
+    # METALNESS
     if mat_metalness_path:
         vmat_file.write(f'\tF_METALNESS_TEXTURE 1\n')
         vmat_file.write(f'\tTextureMetalness "{mat_metalness_path}"\n')
+    else:
+        vmat_file.write(f'\tg_flMetalness "0.000"\n')
 
+    # OPACITY
     if mat_opacity_path:
         vmat_file.write(f'\tF_ALPHA_TEST 1\n')
         vmat_file.write(f'\tg_flAlphaTestReference "0.500"\n')
@@ -143,6 +156,7 @@ for folder in subfolders:
     vmat_file.write('\t{\n')
     vmat_file.write(f'\t\tWorldMappingWidth "{mat_world_width}"\n')
     vmat_file.write(f'\t\tWorldMappingHeight "{mat_world_height}"\n')
+    vmat_file.write(f'\t\tPhysicsSurfaceProperties "{mat_surfprop}"\n')
     vmat_file.write('\t}\n')
 
 
