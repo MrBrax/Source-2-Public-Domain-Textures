@@ -33,6 +33,8 @@ for folder in subfolders:
     mat_ao_path = ""
     mat_rough_path = ""
 
+    flip_normals = True
+
     files = os.scandir(folder) # why again
     for file in files:
         m_type = Path(file).stem.rsplit("_", 1)[1]
@@ -46,12 +48,14 @@ for folder in subfolders:
         if m_type == "Normal":
             mat_normal_path = m_path
             
-            normal_settings = open( Path(file).with_suffix(".txt"), "w" )
-            normal_settings.write('"settings"\n')
-            normal_settings.write('{\n')
-            normal_settings.write('\t"legacy_source1_inverted_normal"\t\t"1"\n')
-            normal_settings.write('}\n')
-            normal_settings.close()
+            # invert normal
+            if flip_normals:
+                normal_settings = open( Path(file).with_suffix(".txt"), "w" )
+                normal_settings.write('"settings"\n')
+                normal_settings.write('{\n')
+                normal_settings.write('\t"legacy_source1_inverted_normal"\t\t"1"\n')
+                normal_settings.write('}\n')
+                normal_settings.close()
         
         if m_type == "Roughness":
             mat_rough_path = m_path
