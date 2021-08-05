@@ -27,16 +27,27 @@ for folder in subfolders:
 
     material_name = os.path.basename(folder).split("_")[0].lower()
     material_path = os.path.realpath(folder).split("ambientcg\\")[1].replace("\\", "/")
-    
+
+    mat_shader = "simple.vfx"
     mat_color_path = ""
     mat_normal_path = ""
     mat_ao_path = ""
     mat_rough_path = ""
+    mat_metalness_path = ""
+    mat_opacity_path = ""
+
+    # sane defaults for 2k
+    mat_world_width = 128
+    mat_world_height = 128
 
     flip_normals = True
 
     files = os.scandir(folder) # why again
     for file in files:
+
+        if Path(file).suffix == ".txt":
+            continue
+
         m_type = Path(file).stem.rsplit("_", 1)[1]
         # m_type = os.path.basename(file).rsplit("_", 1)[1]
         m_path = material_path + "/" + Path(file).name
@@ -60,11 +71,18 @@ for folder in subfolders:
         if m_type == "Roughness":
             mat_rough_path = m_path
 
+        if m_type == "Metalness":
+            mat_metalness_path = m_path
+
         if m_type == "AmbientOcclusion":
             mat_ao_path = m_path
+        
+        if m_type == "Opacity":
+            mat_opacity_path = m_path
 
 
-    mat_shader = "simple.vfx"
+    if mat_opacity_path:
+        mat_shader = "complex.vfx"
     
 
     print(f"Material name: {material_name}")
@@ -76,6 +94,9 @@ for folder in subfolders:
     vmat_file.write("{\n")
 
     vmat_file.write(f"\tshader \"{mat_shader}\"\n")
+
+    if mat_shader == "complex.vfx":
+        vmat_file.write('\tF_SPECULAR 1\n')
 
     vmat_file.write('\tg_flModelTintAmount "1.000\"\n')
     vmat_file.write('\tg_vColorTint "[1.000000 1.000000 1.000000 0.000000]"\n')
@@ -101,11 +122,29 @@ for folder in subfolders:
         vmat_file.write(f'\tg_flAmbientOcclusionDirectDiffuse "0.000"\n')
         vmat_file.write(f'\tg_flAmbientOcclusionDirectSpecular "0.000"\n')
 
+    if mat_metalness_path:
+        vmat_file.write(f'\tF_METALNESS_TEXTURE 1\n')
+        vmat_file.write(f'\tTextureMetalness "{mat_metalness_path}"\n')
+
+    if mat_opacity_path:
+        vmat_file.write(f'\tF_ALPHA_TEST 1\n')
+        vmat_file.write(f'\tg_flAlphaTestReference "0.500"\n')
+        vmat_file.write(f'\tg_flAntiAliasedEdgeStrength "1.000"\n')
+        vmat_file.write(f'\tTextureTranslucency "{mat_opacity_path}"\n')
+
     vmat_file.write(f'\tg_nScaleTexCoordUByModelScaleAxis "0"\n')
     vmat_file.write(f'\tg_nScaleTexCoordVByModelScaleAxis "0"\n')
     vmat_file.write(f'\tg_vTexCoordOffset "[0.000 0.000]"\n')
     vmat_file.write(f'\tg_vTexCoordScale "[1.000 1.000]"\n')
     vmat_file.write(f'\tg_vTexCoordScrollSpeed "[0.000 0.000]"\n')
+
+    # scaling, todo: fix
+    vmat_file.write(f'\tSystemAttributes\n')
+    vmat_file.write('\t{\n')
+    vmat_file.write(f'\t\tWorldMappingWidth "{mat_world_width}"\n')
+    vmat_file.write(f'\t\tWorldMappingHeight "{mat_world_height}"\n')
+    vmat_file.write('\t}\n')
+
 
     vmat_file.write("}\n")
 
