@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-def output_vmat(folder, material_name, mat_params, parallax=False, white=False):
+def output_vmat(folder, material_name, mat_params, parallax=False, white=False, dirty=False):
 
     print("\n## Output material ##")
     print(f"Folder: {folder}")
@@ -13,6 +13,9 @@ def output_vmat(folder, material_name, mat_params, parallax=False, white=False):
     
     if parallax:
         mat_params['mat_shader'] = "parallax_occlusion.vfx"
+
+    if dirty:
+        mat_params['mat_shader'] = "complex.vfx"
     
 
     vmat_file = open(f"{folder}\\{material_name}.vmat", "w")
@@ -32,17 +35,16 @@ def output_vmat(folder, material_name, mat_params, parallax=False, white=False):
 
     # BASE COLOR
     if white:
-        vmat_file.write(f'\tg_flModelTintAmount "1.000"\n')
-        vmat_file.write(f'\tg_vColorTint "[1.000000 1.000000 1.000000 0.000000]"\n')
         vmat_file.write(f'\tTextureColor "[1.000000 1.000000 1.000000 0.000000]"\n')
     else:
         vmat_file.write(f'\tTextureColor "{mat_params["mat_color_path"]}"\n')
+
 
     vmat_file.write(f'\tg_flFadeExponent "1.000"\n')
     vmat_file.write(f'\tg_bFogEnabled "1"\n')
 
     vmat_file.write(f'\tg_flDirectionalLightmapMinZ "0.050"\n')
-    vmat_file.write(f'\tg_flDirectionalLightmapStrength "1.000"\n')    
+    vmat_file.write(f'\tg_flDirectionalLightmapStrength "1.000"\n')
 
     # NORMAL
     if mat_params["mat_normal_path"]:
@@ -80,6 +82,17 @@ def output_vmat(folder, material_name, mat_params, parallax=False, white=False):
         vmat_file.write(f'\tg_nMinSamples "8"\n')
         vmat_file.write(f'\tTextureHeight "{mat_params["mat_height_path"]}"\n')
 
+
+    # DIRTY
+    if dirty:
+        vmat_file.write(f'\tF_DETAIL_TEXTURE 1 // Mod2X\n')
+        vmat_file.write(f'\tg_flDetailBlendFactor "0.716"\n')
+        vmat_file.write(f'\tg_flDetailBlendToFull "0.000"\n')
+        vmat_file.write(f'\tg_flDetailTexCoordRotation "0.000"\n')
+        vmat_file.write(f'\tg_vDetailTexCoordOffset "[0.000 0.000]"\n')
+        vmat_file.write(f'\tg_vDetailTexCoordScale "[1.000 1.000]"\n')
+        vmat_file.write(f'\tTextureDetail "materials/cc0textures/plaster001/plaster001_2k_displacement.jpg"\n') # todo: not hardcoded
+        vmat_file.write(f'\tTextureDetailMask "materials/default/default_detailmask.tga"\n')
 
     # texture coordinates
     vmat_file.write(f'\tg_nScaleTexCoordUByModelScaleAxis "0"\n')
@@ -207,6 +220,7 @@ for folder_author in subfolders_authors:
 
         output_vmat(folder, material_name, mat_params)
         output_vmat(folder, material_name + "_white", mat_params, white=True)
+        output_vmat(folder, material_name + "_dirty", mat_params, dirty=True)
 
         if mat_params["mat_height_path"]:
             output_vmat(folder, material_name + "_parallax", mat_params, parallax=True)
