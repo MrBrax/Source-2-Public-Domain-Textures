@@ -113,17 +113,24 @@ def output_vmat(folder, material_name, mat_params, parallax=False, white=False, 
 
     vmat_file.close();
 
+list_file = open(f"./MATERIALS.md", "w")
+list_file.write(f"# Materials")
+
 subfolders_authors = [ f.path for f in os.scandir("./materials") if f.is_dir() ]
 
 for folder_author in subfolders_authors:
 
     print(f"\nCheck author: {folder_author}")
 
+    list_file.write(f"\n## {Path(folder_author).name}")
+
     subfolders = [ f.path for f in os.scandir(folder_author) if f.is_dir() ]
 
     for folder in subfolders:
 
         print(f"Check material: {folder}")
+
+        list_file.write(f"\n- {Path(folder).name}")
 
         files = os.scandir(folder)
 
@@ -225,4 +232,8 @@ for folder_author in subfolders_authors:
         if mat_params["mat_height_path"]:
             output_vmat(folder, material_name + "_parallax", mat_params, parallax=True)
 
+    list_file.write(f"\n")
+
     # print(subfolders)
+
+list_file.close()
