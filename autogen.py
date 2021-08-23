@@ -183,7 +183,7 @@ for folder_author in subfolders_authors:
         files = os.scandir(folder) # why again
         for file in files:
 
-            if Path(file).suffix not in [".jpg", ".tga", ".png"]:
+            if Path(file).suffix not in [".jpg", ".tga", ".png", ".exr"]:
                 continue
 
             # print(f"Check file: {Path(file).stem}")
@@ -201,7 +201,7 @@ for folder_author in subfolders_authors:
                 mat_params["mat_normal_path"] = m_path
                 
                 # invert normal
-                if flip_normals:
+                if flip_normals and not Path(file).with_suffix(".txt").exists():
                     normal_settings = open( Path(file).with_suffix(".txt"), "w" )
                     normal_settings.write('"settings"\n')
                     normal_settings.write('{\n')
