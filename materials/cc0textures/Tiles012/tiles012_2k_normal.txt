@@ -1,4 +1,4 @@
 "settings"
 {
-	"maxres"		"512"
+	"legacy_source1_inverted_normal"		"1"
 }

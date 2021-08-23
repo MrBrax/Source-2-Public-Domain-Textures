@@ -34,13 +34,17 @@
 - Carpet004
 - Carpet011
 - Carpet014
+- Concrete003
+- Concrete004
 - Concrete007
 - Concrete013
+- Concrete017
 - Concrete023
 - Concrete025
 - Concrete026
 - Concrete028
 - Concrete030
+- Concrete031
 - Concrete034
 - Concrete036
 - CorrugatedSteel002
