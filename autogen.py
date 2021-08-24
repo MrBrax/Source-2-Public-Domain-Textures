@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-def output_vmat(folder, material_name, mat_params, parallax=False, white=False, dirty=False):
+def output_vmat(folder, material_name, mat_params, parallax=False, white=False, dirty=False, overlay=False):
 
     full_path = f"{folder}\\{material_name}.vmat"
 
@@ -23,6 +23,9 @@ def output_vmat(folder, material_name, mat_params, parallax=False, white=False, 
     if dirty:
         mat_params['mat_shader'] = "complex.vfx"
     
+    if overlay:
+        mat_params['mat_shader'] = "static_overlay.vfx"
+
 
     vmat_file = open(full_path, "w")
 
@@ -32,8 +35,13 @@ def output_vmat(folder, material_name, mat_params, parallax=False, white=False, 
 
     vmat_file.write(f"\tshader \"{mat_params['mat_shader']}\"\n")
 
+    # COMPLEX SPECULAR
     if mat_params["mat_shader"] == "complex.vfx":
         vmat_file.write('\tF_SPECULAR 1\n')
+
+    ## OVERLAY
+    if mat_params["mat_shader"] == "static_overlay.vfx":
+        vmat_file.write('\tF_BLEND_MODE 1 // Translucent\n')
 
     # TINT
     vmat_file.write('\tg_flModelTintAmount "1.000\"\n')
@@ -46,72 +54,74 @@ def output_vmat(folder, material_name, mat_params, parallax=False, white=False, 
         vmat_file.write(f'\tTextureColor "{mat_params["mat_color_path"]}"\n')
 
 
-    vmat_file.write(f'\tg_flFadeExponent "1.000"\n')
-    vmat_file.write(f'\tg_bFogEnabled "1"\n')
+    vmat_file.write(f'\n\n\tg_flFadeExponent "1.000"')
+    vmat_file.write(f'\n\tg_bFogEnabled "1"')
 
-    vmat_file.write(f'\tg_flDirectionalLightmapMinZ "0.050"\n')
-    vmat_file.write(f'\tg_flDirectionalLightmapStrength "1.000"\n')
+    vmat_file.write(f'\n\n\tg_flDirectionalLightmapMinZ "0.050"')
+    vmat_file.write(f'\n\tg_flDirectionalLightmapStrength "1.000"')
 
     # NORMAL
     if mat_params["mat_normal_path"]:
-        vmat_file.write(f'\tTextureNormal "{mat_params["mat_normal_path"]}"\n')
+        vmat_file.write(f'\n\n\tTextureNormal "{mat_params["mat_normal_path"]}"')
 
     # ROUGHNESS
     if mat_params["mat_rough_path"]:
-        vmat_file.write(f'\tTextureRoughness "{mat_params["mat_rough_path"]}"\n')
+        vmat_file.write(f'\n\n\tTextureRoughness "{mat_params["mat_rough_path"]}"')
 
     # AMBIENT OCCLUSION
     if mat_params["mat_ao_path"]:
-        vmat_file.write(f'\tTextureAmbientOcclusion "{mat_params["mat_ao_path"]}"\n')
-        vmat_file.write(f'\tg_flAmbientOcclusionDirectDiffuse "0.000"\n')
-        vmat_file.write(f'\tg_flAmbientOcclusionDirectSpecular "0.000"\n')
+        vmat_file.write(f'\n\n\tTextureAmbientOcclusion "{mat_params["mat_ao_path"]}"')
+        vmat_file.write(f'\n\tg_flAmbientOcclusionDirectDiffuse "0.000"')
+        vmat_file.write(f'\n\tg_flAmbientOcclusionDirectSpecular "0.000"')
 
     # METALNESS
     if mat_params['mat_metalness_path']:
-        vmat_file.write(f'\tF_METALNESS_TEXTURE 1\n')
-        vmat_file.write(f'\tTextureMetalness "{mat_params["mat_metalness_path"]}"\n')
+        vmat_file.write(f'\n\n\tF_METALNESS_TEXTURE 1')
+        vmat_file.write(f'\n\tTextureMetalness "{mat_params["mat_metalness_path"]}"')
     else:
-        vmat_file.write(f'\tg_flMetalness "0.000"\n')
+        vmat_file.write(f'\n\n\tg_flMetalness "0.000"')
 
     # OPACITY
     if mat_params['mat_opacity_path']:
-        vmat_file.write(f'\tF_ALPHA_TEST 1\n')
-        vmat_file.write(f'\tg_flAlphaTestReference "0.500"\n')
-        vmat_file.write(f'\tg_flAntiAliasedEdgeStrength "1.000"\n')
-        vmat_file.write(f'\tTextureTranslucency "{mat_params["mat_opacity_path"]}"\n')
+        vmat_file.write(f'\n\n\tF_ALPHA_TEST 1')
+        vmat_file.write(f'\n\tg_flAlphaTestReference "0.500"')
+        vmat_file.write(f'\n\tg_flAntiAliasedEdgeStrength "1.000"')
+        vmat_file.write(f'\n\tTextureTranslucency "{mat_params["mat_opacity_path"]}"')
 
     # PARALLAX
     if parallax:
-        vmat_file.write(f'\tg_flHeightMapScale "0.020"\n')
-        vmat_file.write(f'\tg_nLODThreshold "4"\n')
-        vmat_file.write(f'\tg_nMaxSamples "32"\n')
-        vmat_file.write(f'\tg_nMinSamples "8"\n')
-        vmat_file.write(f'\tTextureHeight "{mat_params["mat_height_path"]}"\n')
+        vmat_file.write(f'\n\n\tg_flHeightMapScale "0.020"')
+        vmat_file.write(f'\n\tg_nLODThreshold "4"')
+        vmat_file.write(f'\n\tg_nMaxSamples "32"')
+        vmat_file.write(f'\n\tg_nMinSamples "8"')
+        vmat_file.write(f'\n\tTextureHeight "{mat_params["mat_height_path"]}"')
 
 
     # DIRTY
     if dirty:
-        vmat_file.write(f'\tF_DETAIL_TEXTURE 1 // Mod2X\n')
-        vmat_file.write(f'\tg_flDetailBlendFactor "0.716"\n')
-        vmat_file.write(f'\tg_flDetailBlendToFull "0.000"\n')
-        vmat_file.write(f'\tg_flDetailTexCoordRotation "0.000"\n')
-        vmat_file.write(f'\tg_vDetailTexCoordOffset "[0.000 0.000]"\n')
-        vmat_file.write(f'\tg_vDetailTexCoordScale "[1.000 1.000]"\n')
-        vmat_file.write(f'\tTextureDetail "materials/cc0textures/plaster001/plaster001_2k_displacement.jpg"\n') # todo: not hardcoded
-        vmat_file.write(f'\tTextureDetailMask "materials/default/default_detailmask.tga"\n')
+        vmat_file.write(f'\n\tF_DETAIL_TEXTURE 1 // Mod2X')
+        vmat_file.write(f'\n\tg_flDetailBlendFactor "0.716"')
+        vmat_file.write(f'\n\tg_flDetailBlendToFull "0.000"')
+        vmat_file.write(f'\n\tg_flDetailTexCoordRotation "0.000"')
+        vmat_file.write(f'\n\tg_vDetailTexCoordOffset "[0.000 0.000]"')
+        vmat_file.write(f'\n\tg_vDetailTexCoordScale "[1.000 1.000]"')
+        vmat_file.write(f'\n\tTextureDetail "materials/cc0textures/plaster001/plaster001_2k_displacement.jpg"') # todo: not hardcoded
+        vmat_file.write(f'\n\tTextureDetailMask "materials/default/default_detailmask.tga"')
 
     # texture coordinates
-    vmat_file.write(f'\tg_nScaleTexCoordUByModelScaleAxis "0"\n')
-    vmat_file.write(f'\tg_nScaleTexCoordVByModelScaleAxis "0"\n')
-    vmat_file.write(f'\tg_vTexCoordOffset "[0.000 0.000]"\n')
-    vmat_file.write(f'\tg_vTexCoordScale "[1.000 1.000]"\n')
-    vmat_file.write(f'\tg_vTexCoordScrollSpeed "[0.000 0.000]"\n')
+    vmat_file.write(f'\n\tg_nScaleTexCoordUByModelScaleAxis "0"')
+    vmat_file.write(f'\n\tg_nScaleTexCoordVByModelScaleAxis "0"')
+    vmat_file.write(f'\n\tg_vTexCoordOffset "[0.000 0.000]"')
+    vmat_file.write(f'\n\tg_vTexCoordScale "[1.000 1.000]"')
+    vmat_file.write(f'\n\tg_vTexCoordScrollSpeed "[0.000 0.000]"')
 
-    # scaling, todo: fix
-    vmat_file.write(f'\tSystemAttributes\n')
+    # scaling, todo: generate from resolution or something
+    vmat_file.write(f'\n\n\tSystemAttributes\n')
     vmat_file.write('\t{\n')
-    vmat_file.write(f'\t\tWorldMappingWidth "{mat_params["mat_world_width"]}"\n')
-    vmat_file.write(f'\t\tWorldMappingHeight "{mat_params["mat_world_height"]}"\n')
+    if not overlay:
+        vmat_file.write(f'\t\tWorldMappingWidth "{mat_params["mat_world_width"]}"\n')
+        vmat_file.write(f'\t\tWorldMappingHeight "{mat_params["mat_world_height"]}"\n')
+
     vmat_file.write(f'\t\tPhysicsSurfaceProperties "{mat_params["mat_surfprop"]}"\n')
     vmat_file.write('\t}\n')
 
@@ -180,8 +190,13 @@ for folder_author in subfolders_authors:
 
         flip_normals = True
 
+        is_overlay = False
+
         files = os.scandir(folder) # why again
         for file in files:
+
+            if Path(file).name == ".overlay":
+                is_overlay = True
 
             if Path(file).suffix not in [".jpg", ".tga", ".png", ".exr"]:
                 continue
@@ -236,12 +251,15 @@ for folder_author in subfolders_authors:
 
         print(f"Material name: {material_name}")
 
-        output_vmat(folder, material_name, mat_params)
-        output_vmat(folder, material_name + "_white", mat_params, white=True)
-        output_vmat(folder, material_name + "_dirty", mat_params, dirty=True)
+        if is_overlay:
+            output_vmat(folder, material_name + "_overlay", mat_params, overlay=True)
+        else:
+            output_vmat(folder, material_name, mat_params)
+            output_vmat(folder, material_name + "_white", mat_params, white=True)
+            output_vmat(folder, material_name + "_dirty", mat_params, dirty=True)
 
-        if mat_params["mat_height_path"]:
-            output_vmat(folder, material_name + "_parallax", mat_params, parallax=True)
+            if mat_params["mat_height_path"]:
+                output_vmat(folder, material_name + "_parallax", mat_params, parallax=True)
 
     list_file.write(f"\n")
 

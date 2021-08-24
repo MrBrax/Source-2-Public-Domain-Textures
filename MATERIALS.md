@@ -124,6 +124,8 @@
 - Plaster001
 - Road004
 - Road007
+- RoadLines003
+- RoadLines004
 - RoadLines007
 - Rock024
 - Rock026
@@ -236,6 +238,7 @@
 - WhiteStuccoWall01
 - WhiteStuccoWall02
 - WhiteStuccoWall03
+- YieldLineRoadMarking01
 
 ## default
 
@@ -243,6 +246,7 @@
 - texturesource
 
 ## polyhaven
+- brown_planks_03
 - brown_planks_04
 - castle_wall_slates
 - castle_wall_variation
