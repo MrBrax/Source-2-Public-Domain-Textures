@@ -95,6 +95,7 @@
 - Moss003
 - OfficeCeiling001
 - OfficeCeiling004
+- OutdoorHDRI001
 - OutdoorHDRI005
 - PaintedBricks004
 - PaintedMetal016
@@ -177,6 +178,7 @@
 - Tiles105
 - Tiles107
 - Tiles108
+- TreeEnd005
 - Wood003
 - Wood005
 - Wood006
@@ -241,7 +243,6 @@
 - texturesource
 
 ## polyhaven
-- brown_planks_03
 - brown_planks_04
 - castle_wall_slates
 - castle_wall_variation
