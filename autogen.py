@@ -212,10 +212,10 @@ for folder_author in subfolders_authors:
             if m_type in ["Color", "BaseColor"]:
                 mat_params["mat_color_path"] = m_path
 
-            if m_type == "Normal":
+            if m_type in "Normal":
                 mat_params["mat_normal_path"] = m_path
                 
-                # invert normal
+                # invert normal, just guessing
                 if flip_normals and not Path(file).with_suffix(".txt").exists():
                     normal_settings = open( Path(file).with_suffix(".txt"), "w" )
                     normal_settings.write('"settings"\n')
@@ -223,6 +223,9 @@ for folder_author in subfolders_authors:
                     normal_settings.write('\t"legacy_source1_inverted_normal"\t\t"1"\n')
                     normal_settings.write('}\n')
                     normal_settings.close()
+
+            if m_type in "NormalGL":
+                mat_params["mat_normal_path"] = m_path
             
             if m_type == "Roughness":
                 mat_params["mat_rough_path"] = m_path

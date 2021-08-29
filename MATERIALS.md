@@ -200,6 +200,7 @@
 - Wood058
 - Wood066
 - Wood068
+- Wood070
 - WoodFloor007
 - WoodFloor013
 - WoodFloor014
