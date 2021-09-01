@@ -65,6 +65,8 @@
 - Grass004
 - Gravel006
 - Ground003
+- Ground027
+- Ground033
 - Ground036
 - Ground037
 - Ground039
@@ -247,7 +249,6 @@
 - texturesource
 
 ## polyhaven
-- brown_planks_03
 - brown_planks_04
 - castle_wall_slates
 - castle_wall_variation
