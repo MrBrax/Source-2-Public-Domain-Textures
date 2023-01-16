@@ -1,10 +1,9 @@
 
-*.jpg
-*.png
-*.tga
-tools_asset_info.bin
+# *.jpg
+# *.png
+# *.tga
 tools_asset_info.bin
 *.psd
-.vmat
+# .vmat
 *.exr
-*.vmat
+# *.vmat
